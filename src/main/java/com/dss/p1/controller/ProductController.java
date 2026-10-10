@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.dss.p1.model.Producto;
+import com.dss.p1.model.Product;
 import com.dss.p1.service.ProductService;
 
 
@@ -27,29 +27,43 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
-	// Muestra todos los productos
+	// Muestra o lista todos los productos
     @GetMapping
     public String getAllProducts(Model model) {
-        List<Producto> products = productService.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
         return "productos";
     }
     
-    // etiqueta -revisar-
+    // Muestra Formulario de alta (ADMIN)
+    @GetMapping("/add")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "formulario-producto";
+    }
+    
+    // Muestra Formulario de edicion (ADMIN)
+    public String showEditProductForm(@PathVariable Long id, Model model) {
+        Product product = productService.getProductById(id);
+        model.addAttribute("product", product);
+        return "formulario-producto";
+    }
+        
+    // etiqueta
     @GetMapping("/{id}")
-    public Producto getProductById(@PathVariable Long id) {
+    public Product getProductById(@PathVariable Long id) {
     	return productService.getProductById(id);
     }
     
-    // Anhade y modifica producto
+    // Anhade y modifica producto (ADMIN)
     @PostMapping
-    public String saveProduct(@ModelAttribute Producto producto) {
+    public String saveProduct(@ModelAttribute Product producto) {
         productService.saveProduct(producto);
         return "redirect:/products";
     }
     
     // para borrar tiene que buscar, ergo GetMapping
-    // borra producto
+    // borrar producto (ADMIN)
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

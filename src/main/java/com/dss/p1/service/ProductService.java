@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dss.p1.repository.ProductRepo;
-import com.dss.p1.model.Producto;
+import com.dss.p1.model.Product;
 
 // etiqueta para reconozca un servicio
 @Service
@@ -16,16 +16,15 @@ public class ProductService {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	public List<Producto> getAllProducts(){
+	public List<Product> getAllProducts(){
 		return productRepo.findAll();
 	}
 	
-	public Producto getProductById(Long id) {
+	public Product getProductById(Long id) {
 		return productRepo.getById(id);
-		// revisar despues
 	}
 	
-	public void saveProduct(Producto producto) {
+	public void saveProduct(Product producto) {
 		productRepo.save(producto);
 	}
 	
