@@ -34,7 +34,7 @@ public class ProductController {
         model.addAttribute("products", products);
         return "productos";
     }
-    
+
     // Muestra Formulario de alta (ADMIN)
     @GetMapping("/add")
     public String showAddProductForm(Model model) {
@@ -43,20 +43,15 @@ public class ProductController {
     }
     
     // Muestra Formulario de edicion (ADMIN)
+    @GetMapping("/edit/{id}")
     public String showEditProductForm(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
         return "formulario-producto";
     }
-        
-    // etiqueta
-    @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-    	return productService.getProductById(id);
-    }
     
     // Anhade y modifica producto (ADMIN)
-    @PostMapping
+    @PostMapping("/save")
     public String saveProduct(@ModelAttribute Product producto) {
         productService.saveProduct(producto);
         return "redirect:/products";
@@ -64,7 +59,7 @@ public class ProductController {
     
     // para borrar tiene que buscar, ergo GetMapping
     // borrar producto (ADMIN)
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return "redirect:/products";

@@ -20,6 +20,12 @@ public class Cart {
     }
 
     public void removeProduct(Long productId) {
-        cartItems.removeIf(product -> product.getId().equals(productId));
+        // Elimina solo una unidad (la primera coincidencia), no todas las del mismo producto
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getId().equals(productId)) {
+                cartItems.remove(i);
+                return;
+            }
+        }
     }
 }

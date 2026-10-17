@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.dss.p1.model.Product;
+import org.springframework.ui.Model;
+
 import com.dss.p1.service.DatabaseExportService;
+import com.dss.p1.service.ProductService;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,13 +25,23 @@ public class AdminController {
 	@Autowired
     private DatabaseExportService databaseExportService;
 
+    @Autowired
+    private ProductService productService;
+
+    // Página de administración (admin.html)
+    @GetMapping
+    public String admin(Model model) {
+        model.addAttribute("products", productService.getAllProducts());
+        return "admin";
+    }
+
     // Descarga BD en queries SQL
     @GetMapping("/export")
     public ResponseEntity<ByteArrayResource> exportDatabase() {
         byte[] data = databaseExportService.exportDatabaseToSql();
         ByteArrayResource resource = new ByteArrayResource(data);
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=productos.sql")
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=products.sql")
         		.contentType(MediaType.APPLICATION_OCTET_STREAM) .contentLength(data.length).body(resource);
     }
 }
